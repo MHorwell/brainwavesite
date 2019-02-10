@@ -10,7 +10,7 @@ let maxDistance = document.getElementById("searchDistance").value;
 let distanceUnit = "N";
 let timeButtons = document.getElementById("timeButtons");
 let beachContainer = document.getElementById("beachContainer");
-let beachAccordion = document.getElementById("beachAccordion");
+let beachDetails = document.getElementById("beachDetails");
 
 
 function searchBeaches() {
@@ -114,6 +114,9 @@ function getSurfData(beachName) {
 }
 
 function getReviews(beachId){
+    beachDetails.className = "container";
+    let beachDescription = document.getElementById("beachDescription");
+    beachDescription.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut libero vitae elit ultricies aliquam. Morbi hendrerit dolor leo, a imperdiet elit efficitur sed. Mauris congue aliquet metus, vitae vehicula nisl ullamcorper eget. Sed eu dui sed est interdum rhoncus in ut turpis. Nam aliquet posuere tortor in pretium. Duis elit justo, fringilla ac metus volutpat, blandit scelerisque nunc. Nulla placerat id risus in accumsan. Aenean in mollis odio, sed aliquam est. Fusce a felis mi. Integer mi elit, eleifend eget risus ac, convallis rutrum elit. Sed sed neque at urna feugiat ullamcorper. Praesent sit amet orci ut lacus fringilla ornare eu vel metus. Donec rhoncus cursus purus, sed porta enim aliquet sed."
 
 }
 
