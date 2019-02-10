@@ -113,7 +113,7 @@ function getSurfData(beachName) {
     }
 }
 
-function getReviews(id){
+function getReviews(beachId){
 
 }
 
