@@ -9,12 +9,12 @@ let currentLongtitude = document.getElementById("longtitude").value;
 let maxDistance = document.getElementById("searchDistance").value;
 let distanceUnit = "N";
 let timeButtons = document.getElementById("timeButtons");
-let beachTable = document.getElementById("beachTable");
+let beachContainer = document.getElementById("beachContainer");
 let beachAccordion = document.getElementById("beachAccordion");
 
 
 function searchBeaches() {
-    beachTable.className = "table-hover mt-6";
+    beachContainer.className = "col col-lg-4";
 
     if (searchString != "") {
         beachDBAPI += "name/" + searchString;
@@ -50,7 +50,7 @@ function processBeachData(beachData) {
             row.setAttribute("data-toggle", "collapse");
             row.setAttribute("data-target", "#beach" + beachId);
             row.setAttribute("href", "#beach" + beachId);
-            row.setAttribute("onclick", "getSurfData('" + beachName + "')");
+            row.setAttribute("onclick", "getSurfData('" + beachName + "'), getReviews(" + beachId + ")");
             let idCell = row.insertCell();
             let nameCell = row.insertCell();
             let distanceCell = row.insertCell();
@@ -68,14 +68,14 @@ function processBeachData(beachData) {
 
 
 function getSurfData(beachName) {
-    document.getElementById("surfReport").className="col";
+    document.getElementById("surfReport").className="col col-lg-8";
     let surfBody = document.getElementById("surfOutput");
     surfBody.innerHTML= "";
     document.getElementById("theBeachName").innerHTML = beachName + " Beach";
     
     let URL = "https://magicseaweed.com/api/196a716c7205dbe82df0d3c6377936e4/forecast/?spot_id=" +
         8 +
-        "&fields=swell.minBreakingHeight,swell.maxBreakingHeight,solidRating"
+        "&fields=swell.minBreakingHeight,swell.maxBreakingHeight,solidRating,fadedRating"
     surfBody.scrollIntoView;
     PROXY = "https://cors-anywhere.herokuapp.com/";
     request.open("GET", PROXY + URL);
@@ -83,14 +83,22 @@ function getSurfData(beachName) {
     request.send();
     request.onload = function () {
         let surfData = request.response;
-
         for (let i = 0; i < 9; i++) {
+            let surfRating = [];
             let surfRow = surfBody.insertRow();
             let surfTime = i * 3 + ":00";
             let minBreak = surfData[i].swell.minBreakingHeight;
             let maxBreak = surfData[i].swell.maxBreakingHeight;
-            let surfRating = surfData[i].solidRating;
-            console.log(minBreak);
+            console.log(surfData.fadedRating);
+
+            for (let r = 0; r < surfData[i].solidRating; r++) {
+                surfRating.push('<img src="http://cdnimages.magicseaweed.com/star_filled.png"/>');
+            }
+             
+            for (let r = 0; r < surfData[i].fadedRating; r++) {
+                surfRating.push('<img src="http://cdnimages.magicseaweed.com/star_empty.png"/>');
+            }
+            
 
             let timeCell = surfRow.insertCell();
             let minBreakCell = surfRow.insertCell();
@@ -100,12 +108,16 @@ function getSurfData(beachName) {
             timeCell.innerHTML = surfTime;
             minBreakCell.innerHTML = minBreak;
             maxBreakCell.innerHTML = maxBreak;
-            surfRatingCell.innerHTML = surfRating;
+            surfRatingCell.innerHTML = surfRating.join(" ");
         }
     }
 }
 
 function getReviews(id){
+
+}
+
+function postReview(id){
 
 }
 

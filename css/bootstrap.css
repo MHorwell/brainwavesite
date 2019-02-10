@@ -217,8 +217,8 @@ svg:not(:root) {
 table {
   border-collapse: collapse;
   outline-style: solid;
-  outline-width: 2px;
-  outline-color: #6c757d;
+  outline-width: 1px;
+  outline-color: #ddd;
 }
 
 caption {
@@ -7554,6 +7554,10 @@ button.bg-dark:focus {
 
 .mt-6 {
   margin-top: 3.5rem !important;
+}
+
+.content{
+  position:relative;
 }
 
 .p-0 {
