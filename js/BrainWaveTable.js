@@ -14,7 +14,7 @@ let beachAccordion = document.getElementById("beachAccordion");
 
 
 function searchBeaches() {
-    beachTable.className = "col";
+    beachTable.className = "table-hover mt-6";
 
     if (searchString != "") {
         beachDBAPI += "name/" + searchString;
@@ -61,8 +61,6 @@ function processBeachData(beachData) {
             } else {
                 distanceCell.innerHTML = beachDistance;
             }
-
-
         }
     }
 
@@ -73,7 +71,7 @@ function getSurfData(beachName) {
     document.getElementById("surfReport").className="col";
     let surfBody = document.getElementById("surfOutput");
     surfBody.innerHTML= "";
-    document.getElementById("theBeachName").innerHTML = beachName;
+    document.getElementById("theBeachName").innerHTML = beachName + " Beach";
     
     let URL = "https://magicseaweed.com/api/196a716c7205dbe82df0d3c6377936e4/forecast/?spot_id=" +
         8 +
@@ -105,6 +103,10 @@ function getSurfData(beachName) {
             surfRatingCell.innerHTML = surfRating;
         }
     }
+}
+
+function getReviews(id){
+
 }
 
 
