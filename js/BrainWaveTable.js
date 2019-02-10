@@ -62,63 +62,11 @@ function processBeachData(beachData) {
                 distanceCell.innerHTML = beachDistance;
             }
 
-            // let beachDiv = createBeachDiv(beachId);
-            // beachAccordion.appendChild(beachDiv);
-
-            // beachDiv.appendChild(createTitle(beachName));
-            // beachDiv.appendChild(createSurfTable(beachId));
-
 
         }
     }
 
 }
-
-// function createBeachDiv(beachId) {
-//     let newBeach = document.createElement("div");
-//     newBeach.className = "collapse";
-//     newBeach.setAttribute("id", "beach" + beachId);
-
-//     return newBeach;
-// }
-
-// function createSurfTable(beachId) {
-//     let surfTable = document.createElement("table");
-//     surfTable.className = "table";
-
-//     let thead = document.createElement("thead");
-//     surfTable.appendChild(thead);
-
-//     let tableHeadRow = thead.insertRow();
-
-//     let th1 = document.createElement("th");
-//     th1.innerHTML = "Time";
-//     tableHeadRow.appendChild(th1);
-
-//     let th2 = document.createElement("th");
-//     th2.innerHTML = "Min Break";
-//     tableHeadRow.appendChild(th2);
-
-//     let th3 = document.createElement("th");
-//     th3.innerHTML = "Max Break";
-//     tableHeadRow.appendChild(th3);
-
-//     let th4 = document.createElement("th");
-//     th4.innerHTML = "SurfRating";
-//     tableHeadRow.appendChild(th4);
-
-//     let tbody = document.createElement("tbody");
-//     tbody.setAttribute("id", "surfTableBody" + beachId);
-//     surfTable.appendChild(tbody);
-
-//     return surfTable;
-// }
-
-// function createTitle(title) {
-//     let h1 = document.createElement("h1");
-//     h1.innerHTML = title;
-//     return h1;
-// }
 
 
 function getSurfData(beachName) {
