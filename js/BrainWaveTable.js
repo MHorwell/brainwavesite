@@ -3,10 +3,6 @@ let request = new XMLHttpRequest();
 let output = document.getElementById("output");
 
 let beachDBAPI = "http://localhost:8080/api/beach/";
-let searchString = document.getElementById("beachName").value;
-let currentLatitude = document.getElementById("latitude").value;
-let currentLongtitude = document.getElementById("longtitude").value;
-let maxDistance = document.getElementById("searchDistance").value;
 let distanceUnit = "N";
 let timeButtons = document.getElementById("timeButtons");
 let beachContainer = document.getElementById("beachContainer");
@@ -14,6 +10,8 @@ let beachDetails = document.getElementById("beachDetails");
 
 
 function searchBeaches() {
+
+    let searchString = document.getElementById("beachName").value;
     beachContainer.className = "col col-lg-4";
 
     if (searchString != "") {
@@ -37,6 +35,10 @@ function searchBeaches() {
 }
 
 function processBeachData(beachData) {
+
+    let currentLatitude = document.getElementById("latitude").value;
+    let currentLongtitude = document.getElementById("longtitude").value;
+    let maxDistance = document.getElementById("searchDistance").value;
     for (let i = 0; i < beachData.length; i++) {
         let beachId = beachData[i].id;
         let beachName = beachData[i].name;
@@ -68,11 +70,11 @@ function processBeachData(beachData) {
 
 
 function getSurfData(beachName) {
-    document.getElementById("surfReport").className="col col-lg-8";
+    document.getElementById("surfReport").className = "col col-lg-8";
     let surfBody = document.getElementById("surfOutput");
-    surfBody.innerHTML= "";
+    surfBody.innerHTML = "";
     document.getElementById("theBeachName").innerHTML = beachName + " Beach";
-    
+
     let URL = "https://magicseaweed.com/api/196a716c7205dbe82df0d3c6377936e4/forecast/?spot_id=" +
         8 +
         "&fields=swell.minBreakingHeight,swell.maxBreakingHeight,solidRating,fadedRating"
@@ -94,11 +96,11 @@ function getSurfData(beachName) {
             for (let r = 0; r < surfData[i].solidRating; r++) {
                 surfRating.push('<img src="http://cdnimages.magicseaweed.com/star_filled.png"/>');
             }
-             
+
             for (let r = 0; r < surfData[i].fadedRating; r++) {
                 surfRating.push('<img src="http://cdnimages.magicseaweed.com/star_empty.png"/>');
             }
-            
+
 
             let timeCell = surfRow.insertCell();
             let minBreakCell = surfRow.insertCell();
@@ -113,14 +115,14 @@ function getSurfData(beachName) {
     }
 }
 
-function getReviews(beachId){
+function getReviews(beachId) {
     beachDetails.className = "container";
     let beachDescription = document.getElementById("beachDescription");
     beachDescription.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut libero vitae elit ultricies aliquam. Morbi hendrerit dolor leo, a imperdiet elit efficitur sed. Mauris congue aliquet metus, vitae vehicula nisl ullamcorper eget. Sed eu dui sed est interdum rhoncus in ut turpis. Nam aliquet posuere tortor in pretium. Duis elit justo, fringilla ac metus volutpat, blandit scelerisque nunc. Nulla placerat id risus in accumsan. Aenean in mollis odio, sed aliquam est. Fusce a felis mi. Integer mi elit, eleifend eget risus ac, convallis rutrum elit. Sed sed neque at urna feugiat ullamcorper. Praesent sit amet orci ut lacus fringilla ornare eu vel metus. Donec rhoncus cursus purus, sed porta enim aliquet sed."
 
 }
 
-function postReview(id){
+function postReview(id) {
 
 }
 
