@@ -1,8 +1,6 @@
-
-let request = new XMLHttpRequest();
 let output = document.getElementById("output");
 
-let distanceUnit = "K";
+let distanceUnit;
 let timeButtons = document.getElementById("timeButtons");
 let beachContainer = document.getElementById("beachContainer");
 let beachDetails = document.getElementById("beachDetails");
@@ -120,8 +118,9 @@ function getReviews(beachId) {
 }
 
 function processReviews(data) {
-    let output = document.getElementById("reviewOutput");
+    
     let dataSize = data.length;
+    let output = document.getElementById("reviewOutput");
     let facilitiesRatingCell = document.getElementById("facilitiesRating");
     let surfRatingCell = document.getElementById("surfingRating");
     let rockpoolRatingCell = document.getElementById("rockpoolsRating");
@@ -148,23 +147,19 @@ function processReviews(data) {
         let surf = reviewRow.insertCell();
         let rockpools = reviewRow.insertCell();
         facilities.innerHTML = facilitiesRating;
-        surf.innerHTML = rockpoolRating;
+        surf.innerHTML = surfRating;
         rockpools.innerHTML = rockpoolRating;
+        console.log(rockpoolRating);
 
-        
         totalFacilities += facilitiesRating;
         totalSurf += surfRating;
         totalRockpool += rockpoolRating;
 
     }
 
-    let facilitiesStars = getStarRating(totalFacilities, dataSize);
-    let surfStars = getStarRating(totalSurf, dataSize);
-    let rockpoolStars = getStarRating(totalRockpool, dataSize);
-
-    facilitiesRatingCell.innerHTML = facilitiesStars;
-    surfRatingCell.innerHTML = surfStars;
-    rockpoolRatingCell.innerHTML = rockpoolStars;
+    facilitiesRatingCell.innerHTML = getStarRating(totalFacilities, dataSize);
+    surfRatingCell.innerHTML = getStarRating(totalSurf, dataSize);
+    rockpoolRatingCell.innerHTML = getStarRating(totalRockpool, dataSize);
 }
 
 function getStarRating(total, datasize) {
@@ -186,12 +181,14 @@ function postReview(id) {
 
 }
 
-function changeDistance(unit) {
+function changeDistanceUnit(unit) {
     distanceUnit = unit;
+    console.log(distanceUnit);
 }
 
 
 function distance(lat1, lon1, lat2, lon2, unit) {
+    console.log(unit);
     if ((lat1 == lat2) && (lon1 == lon2)) {
         return 0;
     }

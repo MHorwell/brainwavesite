@@ -31,10 +31,10 @@
                 <input type="number" class="form-control my-1 mx-sm-1" id="searchDistance" placeholder="Within">
                 <div class="btn-group btn-group-toggle my-1 mr-sm-2" data-toggle="buttons">
                     <label class="btn btn-secondary active ml-sm-1">
-                        <input type="radio" name="options" id="km" autocomplete="off" onclick="changeDistance('K')"> Km
+                        <input type="radio" name="options" id="km" onclick="changeDistanceUnit('K');"> Km
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="miles" autocomplete="off" onclick="changeDistance('N')">
+                        <input type="radio" name="options" id="miles" onclick="changeDistanceUnit('N');">
                         Miles
                     </label>
                 </div>
@@ -99,7 +99,7 @@
         </div>
 
         <div class="row">
-            <div id="reviewtable" class="d-none">
+            <div id="reviewTable" class="d-none">
                 <h1 id="theBeachName"></h1>
                 <table class="table">
                     <thead>
