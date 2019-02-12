@@ -20,12 +20,9 @@ function searchBeaches() {
 
     output.innerHTML = "";
 
-    request.open("GET", beachDBAPI, true);
-    request.responseType = "json";
-    request.send();
-    request.onload = function () {
-        processBeachData(request.response);
-    }
+    fetch(beachDBAPI)
+        .then(response => response.json())
+        .then(data => processBeachData(data))
 }
 
 function processBeachData(beachData) {
@@ -43,7 +40,7 @@ function processBeachData(beachData) {
         if (beachDistance < maxDistance || maxDistance == 0) {
             let row = output.insertRow();
             row.setAttribute("class", "clickable");
-            row.setAttribute("onclick", "getSurfData('" + beachId + "');");
+            row.setAttribute("onclick", "getReviews(" + beachId + "); getSurfData('" + beachName + "');");
             let idCell = row.insertCell();
             let nameCell = row.insertCell();
             let distanceCell = row.insertCell();
@@ -62,51 +59,51 @@ function processBeachData(beachData) {
 
 function getSurfData(beachName) {
     document.getElementById("surfReport").className = "col col-lg-8";
-    let surfBody = document.getElementById("surfOutput");
-    surfBody.innerHTML = "";
     document.getElementById("theBeachName").innerHTML = beachName + " Beach";
 
     let URL = "https://magicseaweed.com/api/196a716c7205dbe82df0d3c6377936e4/forecast/?spot_id=" +
         8 +
-        "&fields=swell.minBreakingHeight,swell.maxBreakingHeight,solidRating,fadedRating"
-    surfBody.scrollIntoView;
+        "&fields=swell.minBreakingHeight,swell.maxBreakingHeight,solidRating,fadedRating";
     PROXY = "https://cors-anywhere.herokuapp.com/";
-    request.open("GET", PROXY + URL);
-    request.responseType = "json";
-    request.send();
-    request.onload = function () {
-        let surfData = request.response;
-        for (let i = 0; i < 9; i++) {
-            let surfRating = [];
-            let surfRow = surfBody.insertRow();
-            let surfTime = i * 3 + ":00";
-            let minBreak = surfData[i].swell.minBreakingHeight;
-            let maxBreak = surfData[i].swell.maxBreakingHeight;
-            console.log(surfData.fadedRating);
 
-            for (let r = 0; r < surfData[i].solidRating; r++) {
-                surfRating.push('<img src="http://cdnimages.magicseaweed.com/star_filled.png"/>');
-            }
-
-            for (let r = 0; r < surfData[i].fadedRating; r++) {
-                surfRating.push('<img src="http://cdnimages.magicseaweed.com/star_empty.png"/>');
-            }
+    fetch(PROXY + URL)
+        .then(response => response.json())
+        .then(data => processSurfData(data))
+}
 
 
-            let timeCell = surfRow.insertCell();
-            let minBreakCell = surfRow.insertCell();
-            let maxBreakCell = surfRow.insertCell();
-            let surfRatingCell = surfRow.insertCell();
+function processSurfData(surfData) {
 
-            timeCell.innerHTML = surfTime;
-            minBreakCell.innerHTML = minBreak;
-            maxBreakCell.innerHTML = maxBreak;
-            surfRatingCell.innerHTML = surfRating.join(" ");
-            
-    
+    let surfBody = document.getElementById("surfOutput");
+    surfBody.innerHTML = "";
+
+    for (let i = 0; i < 9; i++) {
+        let surfRating = [];
+        let surfRow = surfBody.insertRow();
+        let surfTime = i * 3 + ":00";
+        let minBreak = surfData[i].swell.minBreakingHeight;
+        let maxBreak = surfData[i].swell.maxBreakingHeight;
+
+        for (let r = 0; r < surfData[i].solidRating; r++) {
+            surfRating.push('<img src="http://cdnimages.magicseaweed.com/star_filled.png"/>');
         }
-        getReviews(1);
+
+        for (let r = 0; r < surfData[i].fadedRating; r++) {
+            surfRating.push('<img src="http://cdnimages.magicseaweed.com/star_empty.png"/>');
+        }
+
+        let timeCell = surfRow.insertCell();
+        let minBreakCell = surfRow.insertCell();
+        let maxBreakCell = surfRow.insertCell();
+        let surfRatingCell = surfRow.insertCell();
+
+        timeCell.innerHTML = surfTime;
+        minBreakCell.innerHTML = minBreak;
+        maxBreakCell.innerHTML = maxBreak;
+        surfRatingCell.innerHTML = surfRating.join(" ");
+
     }
+
 }
 
 function getReviews(beachId) {
@@ -114,29 +111,82 @@ function getReviews(beachId) {
     let beachDescription = document.getElementById("beachDescription");
     beachDescription.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut libero vitae elit ultricies aliquam. Morbi hendrerit dolor leo, a imperdiet elit efficitur sed. Mauris congue aliquet metus, vitae vehicula nisl ullamcorper eget. Sed eu dui sed est interdum rhoncus in ut turpis. Nam aliquet posuere tortor in pretium. Duis elit justo, fringilla ac metus volutpat, blandit scelerisque nunc. Nulla placerat id risus in accumsan. Aenean in mollis odio, sed aliquam est. Fusce a felis mi. Integer mi elit, eleifend eget risus ac, convallis rutrum elit. Sed sed neque at urna feugiat ullamcorper. Praesent sit amet orci ut lacus fringilla ornare eu vel metus. Donec rhoncus cursus purus, sed porta enim aliquet sed."
     document.getElementById("beachPic").innerHTML = "<img class='img-fluid max-width: 100%' src='https://www.visitcornwall.com/sites/default/files/product_image/Perranporth2_Matt%20Jessop.jpg'/>";
-    URL = "http://localhost:8080/api/beach/" +
-    beachId +
-    "/reviews";
-    request.open("GET", URL);
-    request.responseType = "json";
-    request.send();
-    request.onload = function () {
-        let reviewData = request.response;
-        let finalRockPoolRating = 0;
+    let URL = "http://localhost:8080/api/beach/" +
+        beachId +
+        "/reviews";
+    fetch(URL)
+        .then(response => response.json())
+        .then(data => processReviews(data))
+}
 
-        for (let i = 0; i < reviewData.length; i++) {
-            finalRockPoolRating += parseInt(reviewData[i].rockpoolRating);
+function processReviews(data) {
+    let output = document.getElementById("reviewOutput");
+    let dataSize = data.length;
+    let facilitiesRatingCell = document.getElementById("facilitiesRating");
+    let surfRatingCell = document.getElementById("surfingRating");
+    let rockpoolRatingCell = document.getElementById("rockpoolsRating");
+    let totalFacilities = 0;
+    let totalSurf = 0;
+    let totalRockpool = 0;
+
+    document.getElementById("reviewTable").className = "container-fluid";
+
+    for (let i = 0; i < dataSize; i++) {
+        let reviewRow = output.insertRow();
+        if (data.comment != null) {
+            let commentRow = output.insertRow();
+            let comment = commentRow.insertCell();
+            comment.setAttribute("colspan","3");
+            comment.innerHTML = data.comment;
         }
 
-        console.log(finalRockPoolRating);
+        let facilitiesRating = data[i].facilitiesRating;
+        let surfRating = data[i].surfRating;
+        let rockpoolRating = data[i].rockpoolRating;
+
+        let facilities = reviewRow.insertCell();
+        let surf = reviewRow.insertCell();
+        let rockpools = reviewRow.insertCell();
+        facilities.innerHTML = facilitiesRating;
+        surf.innerHTML = rockpoolRating;
+        rockpools.innerHTML = rockpoolRating;
+
+        
+        totalFacilities += facilitiesRating;
+        totalSurf += surfRating;
+        totalRockpool += rockpoolRating;
+
     }
+
+    let facilitiesStars = getStarRating(totalFacilities, dataSize);
+    let surfStars = getStarRating(totalSurf, dataSize);
+    let rockpoolStars = getStarRating(totalRockpool, dataSize);
+
+    facilitiesRatingCell.innerHTML = facilitiesStars;
+    surfRatingCell.innerHTML = surfStars;
+    rockpoolRatingCell.innerHTML = rockpoolStars;
+}
+
+function getStarRating(total, datasize) {
+    let starsArray = [];
+    let solidStars = total / datasize;
+
+    for (let r = 0; r < 5; r++) {
+        if (r < solidStars) {
+            starsArray.push('<img src="http://cdnimages.magicseaweed.com/star_filled.png"/>');
+        } else {
+            starsArray.push('<img src="http://cdnimages.magicseaweed.com/star_empty.png"/>');
+        }
+    }
+    return starsArray.join(" ");
 }
 
 function postReview(id) {
 
+
 }
 
-function changeDistance(unit){
+function changeDistance(unit) {
     distanceUnit = unit;
 }
 

@@ -26,14 +26,16 @@
                 <input type="text" class="form-control my-1 mx-sm-1" id="beachName" placeholder="Find Beach">
 
                 <input type="number" step="any" class="form-control my-1 mx-sm-1" id="latitude" placeholder="Latitude">
-                <input type="number" step="any" class="form-control my-1 mx-sm-1" id="longtitude" placeholder="Longtitude">
+                <input type="number" step="any" class="form-control my-1 mx-sm-1" id="longtitude"
+                    placeholder="Longtitude">
                 <input type="number" class="form-control my-1 mx-sm-1" id="searchDistance" placeholder="Within">
                 <div class="btn-group btn-group-toggle my-1 mr-sm-2" data-toggle="buttons">
                     <label class="btn btn-secondary active ml-sm-1">
                         <input type="radio" name="options" id="km" autocomplete="off" onclick="changeDistance('K')"> Km
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="miles" autocomplete="off" onclick="changeDistance('N')"> Miles
+                        <input type="radio" name="options" id="miles" autocomplete="off" onclick="changeDistance('N')">
+                        Miles
                     </label>
                 </div>
                 <button type="button" class="btn mx-sm-1" onclick="searchBeaches()">FindBeaches</button>
@@ -41,7 +43,7 @@
         </div>
     </div>
 
-    <div class="container-fluid" id="tableHolder">
+    <div class="container-fluid">
         <div class="row">
             <div id="beachContainer" class="d-none">
                 <table class="table table-hover mt-6">
@@ -85,22 +87,68 @@
                             <th scope="col">Rockpools</th>
                         </tr>
                     </thead>
-                    <tbody id="beachRating"></tbody>
+                    <tbody id="beachRating">
+                        <tr>
+                            <td id="facilitiesRating"></td>
+                            <td id="surfingRating"></td>
+                            <td id="rockpoolsRating"></td>
+                        </tr>
+                    </tbody>
                 </table>
-                <img src="http://cdnimages.magicseaweed.com/star_filled.png"/>
             </div>
-        </div>
-        <div class="row">
-            <form class="form-inline">
-                <input type="number" class="form-control my-1 mr-sm-2" id="addFacilitiesRating" placeholder="Facilities">
-                <input type="number" class="form-control my-1 mr-sm-2" id="addSurfRating" placeholder="Surf">
-                <input type="number" class="form-control my-1 mr-sm-2" id="addRockpoolRating" placeholder="Rockpools">
-            </form>
         </div>
 
         <div class="row">
-            <label for="inputlg">Leave a comment</label>
-            <input class="form-control input-lg" id="reviewComment" type="text">
+            <div id="reviewtable" class="d-none">
+                <h1 id="theBeachName"></h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Facilities</th>
+                            <th scope="col">Surfing</th>
+                            <th scope="col">Rockpools</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reviewOutput"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-md-3">
+
+                <div class="input-group">
+                    <input type="number" max=5 min=0 class="form-control my-1" id="addFacilitiesRating"
+                        placeholder="Facilities">
+                    <div class="input-group-append my-1 mr-sm-2">
+                        <span class="input-group-text">/5</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <input type="number" max=5 min=0 class="form-control my-1" id="addSurfRating" placeholder="Surf">
+                    <div class="input-group-append my-1 mr-sm-2">
+                        <span class="input-group-text">/5</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <input type="number" max=5 min=0 class="form-control my-1" id="addRockpoolRating"
+                        placeholder="Rockpools">
+                    <div class="input-group-append my-1 mr-sm-2">
+                        <span class="input-group-text">/5</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="input-group">
+                    <textarea class="form-control my-1 mr-sm-2" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <label class="btn btn-secondary my-1 mr-sm-2">
+                        Submit Review
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 
