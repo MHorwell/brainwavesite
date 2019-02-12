@@ -25,15 +25,15 @@
 
                 <input type="text" class="form-control my-1 mx-sm-1" id="beachName" placeholder="Find Beach">
 
-                <input type="number" class="form-control my-1 mx-sm-1" id="latitude" placeholder="Latitude">
-                <input type="number" class="form-control my-1 mx-sm-1" id="longtitude" placeholder="Longtitude">
+                <input type="number" step="any" class="form-control my-1 mx-sm-1" id="latitude" placeholder="Latitude">
+                <input type="number" step="any" class="form-control my-1 mx-sm-1" id="longtitude" placeholder="Longtitude">
                 <input type="number" class="form-control my-1 mx-sm-1" id="searchDistance" placeholder="Within">
                 <div class="btn-group btn-group-toggle my-1 mr-sm-2" data-toggle="buttons">
                     <label class="btn btn-secondary active ml-sm-1">
-                        <input type="radio" name="options" id="km" autocomplete="off" checked> Km
+                        <input type="radio" name="options" id="km" autocomplete="off" onclick="changeDistance('K')"> Km
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="miles" autocomplete="off"> Miles
+                        <input type="radio" name="options" id="miles" autocomplete="off" onclick="changeDistance('N')"> Miles
                     </label>
                 </div>
                 <button type="button" class="btn mx-sm-1" onclick="searchBeaches()">FindBeaches</button>
@@ -74,16 +74,27 @@
 
     <div class="d-none" id="beachDetails">
         <div class="row">
-            <div class="col-4" id=beachPic></div>
-            <div class="col-8">
+            <div class="col-3" id=beachPic></div>
+            <div class="col-9">
                 <h5 id="beachDescription"></h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Facilities</th>
+                            <th scope="col">Surfing</th>
+                            <th scope="col">Rockpools</th>
+                        </tr>
+                    </thead>
+                    <tbody id="beachRating"></tbody>
+                </table>
+                <img src="http://cdnimages.magicseaweed.com/star_filled.png"/>
             </div>
         </div>
         <div class="row">
             <form class="form-inline">
-                <input type="number" class="form-control my-1 mr-sm-2" id="facilitiesRating" placeholder="Facilities">
-                <input type="number" class="form-control my-1 mr-sm-2" id="surfRating" placeholder="Surf">
-                <input type="number" class="form-control my-1 mr-sm-2" id="rockpoolRating" placeholder="Rockpools">
+                <input type="number" class="form-control my-1 mr-sm-2" id="addFacilitiesRating" placeholder="Facilities">
+                <input type="number" class="form-control my-1 mr-sm-2" id="addSurfRating" placeholder="Surf">
+                <input type="number" class="form-control my-1 mr-sm-2" id="addRockpoolRating" placeholder="Rockpools">
             </form>
         </div>
 

@@ -2,24 +2,20 @@
 let request = new XMLHttpRequest();
 let output = document.getElementById("output");
 
-let beachDBAPI = "http://localhost:8080/api/beach/";
-let distanceUnit = "N";
+let distanceUnit = "K";
 let timeButtons = document.getElementById("timeButtons");
 let beachContainer = document.getElementById("beachContainer");
 let beachDetails = document.getElementById("beachDetails");
+let searchString = document.getElementById("beachName");
 
 
 function searchBeaches() {
-
+    let beachDBAPI = "http://localhost:8080/api/beach/";
     let searchString = document.getElementById("beachName").value;
     beachContainer.className = "col col-lg-4";
 
     if (searchString != "") {
         beachDBAPI += "name/" + searchString;
-    }
-
-    if (document.getElementById("km").checked) {
-        distanceUnit = "K";
     }
 
     output.innerHTML = "";
@@ -29,8 +25,6 @@ function searchBeaches() {
     request.send();
     request.onload = function () {
         processBeachData(request.response);
-
-
     }
 }
 
@@ -49,10 +43,7 @@ function processBeachData(beachData) {
         if (beachDistance < maxDistance || maxDistance == 0) {
             let row = output.insertRow();
             row.setAttribute("class", "clickable");
-            row.setAttribute("data-toggle", "collapse");
-            row.setAttribute("data-target", "#beach" + beachId);
-            row.setAttribute("href", "#beach" + beachId);
-            row.setAttribute("onclick", "getSurfData('" + beachName + "'), getReviews(" + beachId + ")");
+            row.setAttribute("onclick", "getSurfData('" + beachId + "');");
             let idCell = row.insertCell();
             let nameCell = row.insertCell();
             let distanceCell = row.insertCell();
@@ -111,19 +102,42 @@ function getSurfData(beachName) {
             minBreakCell.innerHTML = minBreak;
             maxBreakCell.innerHTML = maxBreak;
             surfRatingCell.innerHTML = surfRating.join(" ");
+            
+    
         }
+        getReviews(1);
     }
 }
 
 function getReviews(beachId) {
-    beachDetails.className = "container";
+    beachDetails.className = "container-fluid";
     let beachDescription = document.getElementById("beachDescription");
     beachDescription.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut libero vitae elit ultricies aliquam. Morbi hendrerit dolor leo, a imperdiet elit efficitur sed. Mauris congue aliquet metus, vitae vehicula nisl ullamcorper eget. Sed eu dui sed est interdum rhoncus in ut turpis. Nam aliquet posuere tortor in pretium. Duis elit justo, fringilla ac metus volutpat, blandit scelerisque nunc. Nulla placerat id risus in accumsan. Aenean in mollis odio, sed aliquam est. Fusce a felis mi. Integer mi elit, eleifend eget risus ac, convallis rutrum elit. Sed sed neque at urna feugiat ullamcorper. Praesent sit amet orci ut lacus fringilla ornare eu vel metus. Donec rhoncus cursus purus, sed porta enim aliquet sed."
+    document.getElementById("beachPic").innerHTML = "<img class='img-fluid max-width: 100%' src='https://www.visitcornwall.com/sites/default/files/product_image/Perranporth2_Matt%20Jessop.jpg'/>";
+    URL = "http://localhost:8080/api/beach/" +
+    beachId +
+    "/reviews";
+    request.open("GET", URL);
+    request.responseType = "json";
+    request.send();
+    request.onload = function () {
+        let reviewData = request.response;
+        let finalRockPoolRating = 0;
 
+        for (let i = 0; i < reviewData.length; i++) {
+            finalRockPoolRating += parseInt(reviewData[i].rockpoolRating);
+        }
+
+        console.log(finalRockPoolRating);
+    }
 }
 
 function postReview(id) {
 
+}
+
+function changeDistance(unit){
+    distanceUnit = unit;
 }
 
 
