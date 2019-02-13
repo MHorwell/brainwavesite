@@ -24,7 +24,6 @@ function searchBeaches() {
 }
 
 function processBeachData(beachData) {
-
     let currentLatitude = document.getElementById("latitude").value;
     let currentLongtitude = document.getElementById("longtitude").value;
     let maxDistance = document.getElementById("searchDistance").value;
@@ -38,7 +37,7 @@ function processBeachData(beachData) {
         if (beachDistance < maxDistance || maxDistance == 0) {
             let row = output.insertRow();
             row.setAttribute("class", "clickable");
-            row.setAttribute("onclick", "getReviews(" + beachId + "); getSurfData('" + beachName + "');");
+            row.setAttribute("onclick", "getReviews(" + beachId + "); getSurfData('" + beachName + "', " + beachId + ");");
             let idCell = row.insertCell();
             let nameCell = row.insertCell();
             let distanceCell = row.insertCell();
@@ -55,12 +54,16 @@ function processBeachData(beachData) {
 }
 
 
-function getSurfData(beachName) {
+function getSurfData(beachName, beachId) {
     document.getElementById("surfReport").className = "col col-lg-8";
     document.getElementById("theBeachName").innerHTML = beachName + " Beach";
+    let searchNumber = 969;
+    if (beachId % 2 == 0){
+        searchNumber = 8
+    }
 
     let URL = "https://magicseaweed.com/api/196a716c7205dbe82df0d3c6377936e4/forecast/?spot_id=" +
-        8 +
+        searchNumber +
         "&fields=swell.minBreakingHeight,swell.maxBreakingHeight,solidRating,fadedRating";
     PROXY = "https://cors-anywhere.herokuapp.com/";
 
@@ -105,10 +108,12 @@ function processSurfData(surfData) {
 }
 
 function getReviews(beachId) {
+    document.getElementById("reviewOutput").innerHTML = "";
+    document.getElementById("submitReviewButton").setAttribute("onClick", "postReview(" + beachId + ")");
     beachDetails.className = "container-fluid";
     let beachDescription = document.getElementById("beachDescription");
     beachDescription.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut libero vitae elit ultricies aliquam. Morbi hendrerit dolor leo, a imperdiet elit efficitur sed. Mauris congue aliquet metus, vitae vehicula nisl ullamcorper eget. Sed eu dui sed est interdum rhoncus in ut turpis. Nam aliquet posuere tortor in pretium. Duis elit justo, fringilla ac metus volutpat, blandit scelerisque nunc. Nulla placerat id risus in accumsan. Aenean in mollis odio, sed aliquam est. Fusce a felis mi. Integer mi elit, eleifend eget risus ac, convallis rutrum elit. Sed sed neque at urna feugiat ullamcorper. Praesent sit amet orci ut lacus fringilla ornare eu vel metus. Donec rhoncus cursus purus, sed porta enim aliquet sed."
-    document.getElementById("beachPic").innerHTML = "<img class='img-fluid max-width: 100%' src='https://www.visitcornwall.com/sites/default/files/product_image/Perranporth2_Matt%20Jessop.jpg'/>";
+    document.getElementById("beachPic").innerHTML = "<img class='img-fluid max-width: 100%' src='img/" + beachId  + ".jpg'/>";
     let URL = "http://localhost:8080/api/beach/" +
         beachId +
         "/reviews";
@@ -118,7 +123,7 @@ function getReviews(beachId) {
 }
 
 function processReviews(data) {
-    
+
     let dataSize = data.length;
     let output = document.getElementById("reviewOutput");
     let facilitiesRatingCell = document.getElementById("facilitiesRating");
@@ -127,6 +132,7 @@ function processReviews(data) {
     let totalFacilities = 0;
     let totalSurf = 0;
     let totalRockpool = 0;
+    output.innerHTML = "";
 
     document.getElementById("reviewTable").className = "container-fluid";
 
@@ -135,21 +141,23 @@ function processReviews(data) {
         if (data.comment != null) {
             let commentRow = output.insertRow();
             let comment = commentRow.insertCell();
-            comment.setAttribute("colspan","3");
-            comment.innerHTML = data.comment;
+            comment.setAttribute("colspan", "3");
+            comment.innerHTML = "<p>" + data.comment + "</p>";
         }
 
         let facilitiesRating = data[i].facilitiesRating;
         let surfRating = data[i].surfRating;
         let rockpoolRating = data[i].rockpoolRating;
+        let creationDate = data[i].creationDate;
 
         let facilities = reviewRow.insertCell();
         let surf = reviewRow.insertCell();
         let rockpools = reviewRow.insertCell();
-        facilities.innerHTML = facilitiesRating;
-        surf.innerHTML = surfRating;
-        rockpools.innerHTML = rockpoolRating;
-        console.log(rockpoolRating);
+        let createdDate = reviewRow.insertCell();
+        facilities.innerHTML = getStarRating(facilitiesRating);
+        surf.innerHTML = getStarRating(surfRating);
+        rockpools.innerHTML = getStarRating(rockpoolRating);
+        createdDate.innerHTML = new Date(creationDate).toDateString();
 
         totalFacilities += facilitiesRating;
         totalSurf += surfRating;
@@ -157,17 +165,16 @@ function processReviews(data) {
 
     }
 
-    facilitiesRatingCell.innerHTML = getStarRating(totalFacilities, dataSize);
-    surfRatingCell.innerHTML = getStarRating(totalSurf, dataSize);
-    rockpoolRatingCell.innerHTML = getStarRating(totalRockpool, dataSize);
+    facilitiesRatingCell.innerHTML = getStarRating(totalFacilities / dataSize);
+    surfRatingCell.innerHTML = getStarRating(totalSurf / dataSize);
+    rockpoolRatingCell.innerHTML = getStarRating(totalRockpool / dataSize) + "<i>   (" + dataSize.toString() + " reviews)</i>";
 }
 
-function getStarRating(total, datasize) {
+function getStarRating(review) {
     let starsArray = [];
-    let solidStars = total / datasize;
 
     for (let r = 0; r < 5; r++) {
-        if (r < solidStars) {
+        if (r < review) {
             starsArray.push('<img src="http://cdnimages.magicseaweed.com/star_filled.png"/>');
         } else {
             starsArray.push('<img src="http://cdnimages.magicseaweed.com/star_empty.png"/>');
@@ -177,13 +184,21 @@ function getStarRating(total, datasize) {
 }
 
 function postReview(id) {
-
-
+    fetch('http://localhost:8080/api/beach/' + id + '/reviews', {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'POST',
+        body: JSON.stringify({
+            facilitiesRating: document.getElementById("addFacilitiesRating").value,
+            surfRating: document.getElementById("addSurfRating").value,
+            rockpoolRating: document.getElementById("addRockpoolRating").value,
+            comment: document.getElementById("reviewComment").value
+        })
+    })
+    getReviews(id);
 }
 
 function changeDistanceUnit(unit) {
     distanceUnit = unit;
-    console.log(distanceUnit);
 }
 
 
@@ -206,6 +221,6 @@ function distance(lat1, lon1, lat2, lon2, unit) {
         dist = dist * 60 * 1.1515;
         if (unit == "K") { dist = dist * 1.609344 }
         if (unit == "N") { dist = dist * 0.8684 }
-        return dist;
+        return Math.round(dist);
     }
 }

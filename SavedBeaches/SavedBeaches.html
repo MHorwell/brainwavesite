@@ -30,11 +30,11 @@
                     placeholder="Longtitude">
                 <input type="number" class="form-control my-1 mx-sm-1" id="searchDistance" placeholder="Within">
                 <div class="btn-group btn-group-toggle my-1 mr-sm-2" data-toggle="buttons">
-                    <label class="btn btn-secondary active ml-sm-1">
-                        <input type="radio" name="options" id="km" onclick="changeDistanceUnit('K');"> Km
+                    <label class="btn btn-secondary active ml-sm-1" onclick="changeDistanceUnit('K');">
+                        <input type="radio" name="options" id="km"> Km
                     </label>
-                    <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="miles" onclick="changeDistanceUnit('N');">
+                    <label class="btn btn-secondary" onclick="changeDistanceUnit('N');">
+                        <input type="radio" name="options" id="miles" >
                         Miles
                     </label>
                 </div>
@@ -76,8 +76,8 @@
 
     <div class="d-none" id="beachDetails">
         <div class="row">
-            <div class="col-3" id=beachPic></div>
-            <div class="col-9">
+            <div class="col-md-3" id=beachPic></div>
+            <div class="col-md-9">
                 <h5 id="beachDescription"></h5>
                 <table class="table">
                     <thead>
@@ -107,6 +107,7 @@
                             <th scope="col">Facilities</th>
                             <th scope="col">Surfing</th>
                             <th scope="col">Rockpools</th>
+							<th scope="col">Submitted</th>
                         </tr>
                     </thead>
                     <tbody id="reviewOutput"></tbody>
@@ -143,8 +144,8 @@
 
             <div class="col">
                 <div class="input-group">
-                    <textarea class="form-control my-1 mr-sm-2" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    <label class="btn btn-secondary my-1 mr-sm-2">
+                    <textarea class="form-control my-1 mr-sm-2" id="reviewComment" rows="3"></textarea>
+                    <label class="btn btn-secondary my-1 mr-sm-2" id="submitReviewButton">
                         Submit Review
                     </label>
                 </div>
@@ -152,7 +153,6 @@
         </div>
     </div>
 
-    </div>
 
 
 
