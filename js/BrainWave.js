@@ -1,4 +1,5 @@
 let output = document.getElementById("output");
+let hostURL = "http://192.168.1.111:8080";
 
 let distanceUnit;
 let timeButtons = document.getElementById("timeButtons");
@@ -8,7 +9,7 @@ let searchString = document.getElementById("beachName");
 
 
 function searchBeaches() {
-    let beachDBAPI = "http://localhost:8080/api/beach/";
+    let beachDBAPI = hostURL + "/api/beach/";
     let searchString = document.getElementById("beachName").value;
     beachContainer.className = "col col-lg-4";
 
@@ -114,7 +115,7 @@ function getReviews(beachId) {
     let beachDescription = document.getElementById("beachDescription");
     beachDescription.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut libero vitae elit ultricies aliquam. Morbi hendrerit dolor leo, a imperdiet elit efficitur sed. Mauris congue aliquet metus, vitae vehicula nisl ullamcorper eget. Sed eu dui sed est interdum rhoncus in ut turpis. Nam aliquet posuere tortor in pretium. Duis elit justo, fringilla ac metus volutpat, blandit scelerisque nunc. Nulla placerat id risus in accumsan. Aenean in mollis odio, sed aliquam est. Fusce a felis mi. Integer mi elit, eleifend eget risus ac, convallis rutrum elit. Sed sed neque at urna feugiat ullamcorper. Praesent sit amet orci ut lacus fringilla ornare eu vel metus. Donec rhoncus cursus purus, sed porta enim aliquet sed."
     document.getElementById("beachPic").innerHTML = "<img class='img-fluid max-width: 100%' src='img/" + beachId  + ".jpg'/>";
-    let URL = "http://localhost:8080/api/beach/" +
+    let URL = hostURL + "/api/beach/" +
         beachId +
         "/reviews";
     fetch(URL)
@@ -138,11 +139,11 @@ function processReviews(data) {
 
     for (let i = 0; i < dataSize; i++) {
         let reviewRow = output.insertRow();
-        if (data.comment != null) {
+        if (data[i].comment != null) {
             let commentRow = output.insertRow();
             let comment = commentRow.insertCell();
-            comment.setAttribute("colspan", "3");
-            comment.innerHTML = "<p>" + data.comment + "</p>";
+            comment.setAttribute("colspan", "4");
+            comment.innerHTML = "<p>" + data[i].comment + "</p>";
         }
 
         let facilitiesRating = data[i].facilitiesRating;
@@ -184,7 +185,7 @@ function getStarRating(review) {
 }
 
 function postReview(id) {
-    fetch('http://localhost:8080/api/beach/' + id + '/reviews', {
+    fetch(hostURL + '/api/beach/' + id + '/reviews', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'POST',
         body: JSON.stringify({
